@@ -74,9 +74,7 @@ class _PlayerPageState extends State<PlayerPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 30.0,
-                          ),
+                          const SizedBox(height: 30.0),
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 20.0),
@@ -96,15 +94,68 @@ class _PlayerPageState extends State<PlayerPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  formatTime(value.currentDuration),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                SizedBox(
+                                  width: 60,
+                                  // child: Center(
+                                  child: Text(
+                                    formatTime(value.currentDuration),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  // ),
                                 ),
-                                Text(
-                                  formatTime(value.totalDuration),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                Row(
+                                  children: [
+                                    TextButton(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateColor.resolveWith(
+                                                  (states) =>
+                                                      value.selectedPlayer == 1
+                                                          ? Theme.of(context)
+                                                              .colorScheme
+                                                              .surface
+                                                          : Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurface),
+                                          minimumSize:
+                                              MaterialStateProperty.all(
+                                                  const Size(40, 40)),
+                                        ),
+                                        onPressed: () => value.togglePlayer(1),
+                                        child: const Text('Pt-br')),
+                                    const SizedBox(width: 10.0),
+                                    TextButton(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateColor.resolveWith(
+                                                  (states) =>
+                                                      value.selectedPlayer == 2
+                                                          ? Theme.of(context)
+                                                              .colorScheme
+                                                              .surface
+                                                          : Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurface),
+                                          minimumSize:
+                                              MaterialStateProperty.all(
+                                                  const Size(40, 40)),
+                                        ),
+                                        onPressed: () => value.togglePlayer(2),
+                                        child: const Text('En-us')),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 60,
+                                  // child: Center(
+                                  child: Text(
+                                    formatTime(value.totalDuration),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.end,
+                                  ),
+                                  // ),
                                 ),
                               ],
                             ),
@@ -127,79 +178,108 @@ class _PlayerPageState extends State<PlayerPage> {
                                   value.seek(Duration(seconds: double.toInt()));
                                 },
                               )),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const SizedBox(width: 10),
-                              TextButton(
-                                onPressed: value.rate,
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateColor.resolveWith((states) =>
-                                          Theme.of(context)
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // const SizedBox(width: 10),
+                                SizedBox(
+                                  width: 50.0,
+                                  child: ElevatedButton(
+                                    onPressed: value.rate,
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) => Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary),
+                                        // minimumSize: MaterialStateProperty.all(
+                                        //     const Size(40, 40)),
+                                        fixedSize: MaterialStateProperty.all(
+                                            const Size(50, 50)),
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.zero)
+                                        // alignment: Alignment.center,
+                                        ),
+                                    child: Text(
+                                      '${value.currentRate}x',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
                                               .colorScheme
-                                              .onSurface),
-                                  minimumSize: MaterialStateProperty.all(
-                                      const Size(40, 40)),
-                                  // alignment: Alignment.center
+                                              .tertiary,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
                                 ),
-                                child: Text(
-                                  '${value.currentRate}x',
-                                  style: TextStyle(
+                                // const SizedBox(width: 10),
+                                TextButton(
+                                  onPressed: () =>
+                                      value.rewindSeek(value.currentDuration),
+                                  child: Icon(
+                                    Icons.fast_rewind_rounded,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    size: 50.0,
+                                  ),
+                                ),
+                                // const SizedBox(width: 5),
+                                TextButton(
+                                  onPressed: value.pauseOrResume,
+                                  child: Icon(
+                                    value.isPlaying
+                                        ? Icons.pause_circle_rounded
+                                        : Icons.play_circle_rounded,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    size: 50.0,
+                                  ),
+                                ),
+                                // const SizedBox(width: 5),
+                                TextButton(
+                                  onPressed: () =>
+                                      value.forwardSeek(value.currentDuration),
+                                  child: Icon(
+                                    Icons.fast_forward_rounded,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    size: 50.0,
+                                  ),
+                                ),
+                                // const SizedBox(width: 10),
+                                SizedBox(
+                                  width: 50.0,
+                                  child: ElevatedButton(
+                                    onPressed: value.toggleFavorite,
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) => Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary),
+                                        // minimumSize: MaterialStateProperty.all(
+                                        //     const Size(40, 40)),
+                                        fixedSize: MaterialStateProperty.all(
+                                            const Size(50, 50)),
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.zero)
+                                        // alignment: Alignment.center,
+                                        ),
+                                    child: Icon(
+                                      value.isFavorite
+                                          ? Icons.favorite_rounded
+                                          : Icons.favorite_outline_rounded,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .tertiary,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold),
+                                          .onSurface,
+                                      size: 30.0,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              TextButton(
-                                onPressed: () =>
-                                    value.rewindSeek(value.currentDuration),
-                                child: Icon(
-                                  Icons.fast_rewind_rounded,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  size: 50.0,
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              TextButton(
-                                onPressed: value.pauseOrResume,
-                                child: Icon(
-                                  value.isPlaying
-                                      ? Icons.pause_circle_rounded
-                                      : Icons.play_circle_rounded,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  size: 50.0,
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              TextButton(
-                                onPressed: () =>
-                                    value.forwardSeek(value.currentDuration),
-                                child: Icon(
-                                  Icons.fast_forward_rounded,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  size: 50.0,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              TextButton(
-                                onPressed: value.toggleFavorite,
-                                child: Icon(
-                                  value.isFavorite
-                                      ? Icons.favorite_rounded
-                                      : Icons.favorite_outline_rounded,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  size: 30.0,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ));

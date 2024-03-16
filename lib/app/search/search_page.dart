@@ -58,7 +58,7 @@ class _SearchPageState extends State<SearchPage> {
             )),
             const SizedBox(height: 20.0),
             Expanded(
-              child: !allDatas.isEmpty
+              child: allDatas.isNotEmpty
                   ? ListView.builder(
                       itemCount: allDatas.length,
                       shrinkWrap: true,
@@ -66,7 +66,8 @@ class _SearchPageState extends State<SearchPage> {
                       itemBuilder: (context, index) {
                         return CardView(
                           title: allDatas[index].title,
-                          audio: !allDatas[index].audio.isEmpty,
+                          audio: allDatas[index].audio.isNotEmpty,
+                          audio2: allDatas[index].audio_en.isNotEmpty,
                           pdf: allDatas[index].pdf,
                           id: allDatas[index].id,
                         );

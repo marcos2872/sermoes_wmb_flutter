@@ -14,25 +14,34 @@ class PlayerProvider extends ChangeNotifier {
   late bool _loading = true;
   late double _rate = 1.0;
   late bool _isFavorite = false;
+  int _selectedPlayer = 1;
 
   PlayerProvider() {
     listenToDuration();
   }
 
   void playPt() async {
+    // if (_selectedPlayer != 1) {
     _loading = true;
     await _audioPlayer.stop();
     await _audioPlayer.setSourceUrl(_currentData.audio);
+    _selectedPlayer = 1;
+    _isPlaying = false;
     _loading = false;
     notifyListeners();
+    // }
   }
 
   void playEn() async {
+    // if (selectedPlayer != 2) {
     _loading = true;
     await _audioPlayer.stop();
     await _audioPlayer.setSourceUrl(_currentData.audio_en);
+    _selectedPlayer = 2;
+    _isPlaying = false;
     _loading = false;
     notifyListeners();
+    // }
   }
 
   void pause() async {
@@ -129,6 +138,17 @@ class PlayerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void togglePlayer(int int) {
+    if (int == 1 && _currentData.audio.isNotEmpty) {
+      playPt();
+      _selectedPlayer = 1;
+    } else if (_currentData.audio_en.isNotEmpty) {
+      playEn();
+      _selectedPlayer = 2;
+    }
+    notifyListeners();
+  }
+
   List<PlayerType> get allDatas => _listDatas;
   PlayerType get currentData => _currentData;
   bool get isPlaying => _isPlaying;
@@ -137,14 +157,18 @@ class PlayerProvider extends ChangeNotifier {
   Duration get currentDuration => _currentDuration;
   double get currentRate => _rate;
   bool get isFavorite => _isFavorite;
+  int get selectedPlayer => _selectedPlayer;
 
-  set setCurrentId(String? id) {
+  set setCurrentId(String id) {
     PlayerType data = _listDatas.firstWhere((element) => element.id == id);
     _currentData = data;
 
-    if (id != null) {
+    if (data.audio.isNotEmpty) {
       playPt();
+    } else {
+      playEn();
     }
+
     notifyListeners();
   }
 }

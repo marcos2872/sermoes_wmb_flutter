@@ -7,6 +7,7 @@ import 'package:sermoes_wmb_flutter/routes.dart';
 class CardView extends StatefulWidget {
   final String title;
   final bool audio;
+  final bool audio2;
   final String pdf;
   final String id;
 
@@ -14,6 +15,7 @@ class CardView extends StatefulWidget {
       {super.key,
       required this.title,
       required this.audio,
+      required this.audio2,
       required this.pdf,
       required this.id});
 
@@ -31,9 +33,11 @@ class _CardViewState extends State<CardView> {
   }
 
   void goPlay() {
-    playListProvider.setCurrentId = widget.id;
+    if (widget.audio || widget.audio2) {
+      playListProvider.setCurrentId = widget.id;
 
-    Routefly.push(routePaths.player.$id.changes({'id': widget.id}));
+      Routefly.push(routePaths.player.$id.changes({'id': widget.id}));
+    }
   }
 
   void goPdf() {
@@ -69,7 +73,7 @@ class _CardViewState extends State<CardView> {
                   child: Icon(
                     Icons.audiotrack_rounded,
                     size: 25.0,
-                    color: widget.audio
+                    color: widget.audio || widget.audio2
                         ? Theme.of(context).colorScheme.surface
                         : Theme.of(context).colorScheme.secondary,
                   )),
