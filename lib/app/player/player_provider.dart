@@ -122,10 +122,11 @@ class PlayerProvider extends ChangeNotifier {
 
   void toggleFavorite() {
     if (_isFavorite) {
-      _isFavorite = true;
-    } else {
       _isFavorite = false;
+    } else {
+      _isFavorite = true;
     }
+    notifyListeners();
   }
 
   List<PlayerType> get allDatas => _listDatas;

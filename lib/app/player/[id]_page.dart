@@ -130,6 +130,7 @@ class _PlayerPageState extends State<PlayerPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              const SizedBox(width: 10),
                               TextButton(
                                 onPressed: value.rate,
                                 style: ButtonStyle(
@@ -138,8 +139,6 @@ class _PlayerPageState extends State<PlayerPage> {
                                           Theme.of(context)
                                               .colorScheme
                                               .onSurface),
-                                  // maximumSize: MaterialStateProperty.all(
-                                  //     const Size(45, 45)),
                                   minimumSize: MaterialStateProperty.all(
                                       const Size(40, 40)),
                                   // alignment: Alignment.center
@@ -154,6 +153,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
+                              const SizedBox(width: 10),
                               TextButton(
                                 onPressed: () =>
                                     value.rewindSeek(value.currentDuration),
@@ -164,6 +164,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                   size: 50.0,
                                 ),
                               ),
+                              const SizedBox(width: 5),
                               TextButton(
                                 onPressed: value.pauseOrResume,
                                 child: Icon(
@@ -175,6 +176,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                   size: 50.0,
                                 ),
                               ),
+                              const SizedBox(width: 5),
                               TextButton(
                                 onPressed: () =>
                                     value.forwardSeek(value.currentDuration),
@@ -185,14 +187,16 @@ class _PlayerPageState extends State<PlayerPage> {
                                   size: 50.0,
                                 ),
                               ),
+                              const SizedBox(width: 10),
                               TextButton(
-                                onPressed: () =>
-                                    value.forwardSeek(value.currentDuration),
+                                onPressed: value.toggleFavorite,
                                 child: Icon(
-                                  Icons.favorite_border_rounded,
+                                  value.isFavorite
+                                      ? Icons.favorite_rounded
+                                      : Icons.favorite_outline_rounded,
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
-                                  size: 40.0,
+                                  size: 30.0,
                                 ),
                               ),
                             ],
