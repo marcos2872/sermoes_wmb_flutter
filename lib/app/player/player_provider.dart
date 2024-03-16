@@ -12,6 +12,8 @@ class PlayerProvider extends ChangeNotifier {
   late Duration _currentDuration = Duration.zero;
   late bool _isPlaying = false;
   late bool _loading = true;
+  late double _rate = 1.0;
+  late bool _isFavorite = false;
 
   PlayerProvider() {
     listenToDuration();
@@ -66,6 +68,26 @@ class PlayerProvider extends ChangeNotifier {
     await _audioPlayer.seek(position - const Duration(seconds: 10));
   }
 
+  void rate() async {
+    if (_rate == 1.0) {
+      await _audioPlayer.setPlaybackRate(1.5);
+      _rate = 1.5;
+    } else if (_rate == 1.5) {
+      await _audioPlayer.setPlaybackRate(2.0);
+      _rate = 2.0;
+    } else if (_rate == 2.0) {
+      await _audioPlayer.setPlaybackRate(0.5);
+      _rate = 0.5;
+    } else if (_rate == 0.5) {
+      await _audioPlayer.setPlaybackRate(1.0);
+      _rate = 1.0;
+    }
+    if (!_isPlaying) {
+      await _audioPlayer.pause();
+    }
+    notifyListeners();
+  }
+
   void playerDispose() async {
     await _audioPlayer.stop();
     await _audioPlayer.dispose();
@@ -98,12 +120,22 @@ class PlayerProvider extends ChangeNotifier {
     });
   }
 
+  void toggleFavorite() {
+    if (_isFavorite) {
+      _isFavorite = true;
+    } else {
+      _isFavorite = false;
+    }
+  }
+
   List<PlayerType> get allDatas => _listDatas;
   PlayerType get currentData => _currentData;
   bool get isPlaying => _isPlaying;
   bool get loading => _loading;
   Duration get totalDuration => _totalDuration;
   Duration get currentDuration => _currentDuration;
+  double get currentRate => _rate;
+  bool get isFavorite => _isFavorite;
 
   set setCurrentId(String? id) {
     PlayerType data = _listDatas.firstWhere((element) => element.id == id);

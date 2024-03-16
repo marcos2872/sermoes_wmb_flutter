@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:routefly/routefly.dart';
 import 'package:sermoes_wmb_flutter/app/player/player_provider.dart';
@@ -129,6 +131,30 @@ class _PlayerPageState extends State<PlayerPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TextButton(
+                                onPressed: value.rate,
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateColor.resolveWith((states) =>
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .onSurface),
+                                  // maximumSize: MaterialStateProperty.all(
+                                  //     const Size(45, 45)),
+                                  minimumSize: MaterialStateProperty.all(
+                                      const Size(40, 40)),
+                                  // alignment: Alignment.center
+                                ),
+                                child: Text(
+                                  '${value.currentRate}x',
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              TextButton(
                                 onPressed: () =>
                                     value.rewindSeek(value.currentDuration),
                                 child: Icon(
@@ -157,6 +183,16 @@ class _PlayerPageState extends State<PlayerPage> {
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
                                   size: 50.0,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    value.forwardSeek(value.currentDuration),
+                                child: Icon(
+                                  Icons.favorite_border_rounded,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  size: 40.0,
                                 ),
                               ),
                             ],
