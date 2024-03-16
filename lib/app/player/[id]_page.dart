@@ -19,6 +19,13 @@ class _PlayerPageState extends State<PlayerPage> {
     playListProvider = Provider.of<PlayerProvider>(context, listen: false);
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    playListProvider.playerDispose();
+  }
+
   String formatTime(Duration duration) {
     String twoDigitalSeconds = duration.inSeconds.remainder(60).toString();
     String twoDigitalMinutes = duration.inMinutes.remainder(60).toString();
@@ -121,15 +128,16 @@ class _PlayerPageState extends State<PlayerPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              // TextButton(
-                              //   onPressed: value.previousPosition,
-                              //   child: Icon(
-                              //     Icons.fast_rewind_rounded,
-                              //     color:
-                              //         Theme.of(context).colorScheme.onSurface,
-                              //     size: 50.0,
-                              //   ),
-                              // ),
+                              TextButton(
+                                onPressed: () =>
+                                    value.rewindSeek(value.currentDuration),
+                                child: Icon(
+                                  Icons.fast_rewind_rounded,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  size: 50.0,
+                                ),
+                              ),
                               TextButton(
                                 onPressed: value.pauseOrResume,
                                 child: Icon(
@@ -141,15 +149,16 @@ class _PlayerPageState extends State<PlayerPage> {
                                   size: 50.0,
                                 ),
                               ),
-                              // TextButton(
-                              //   onPressed: value.nextPosition,
-                              //   child: Icon(
-                              //     Icons.fast_forward_rounded,
-                              //     color:
-                              //         Theme.of(context).colorScheme.onSurface,
-                              //     size: 50.0,
-                              //   ),
-                              // ),
+                              TextButton(
+                                onPressed: () =>
+                                    value.forwardSeek(value.currentDuration),
+                                child: Icon(
+                                  Icons.fast_forward_rounded,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  size: 50.0,
+                                ),
+                              ),
                             ],
                           ),
                         ],

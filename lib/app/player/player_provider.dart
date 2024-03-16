@@ -58,6 +58,21 @@ class PlayerProvider extends ChangeNotifier {
     await _audioPlayer.seek(position);
   }
 
+  void forwardSeek(Duration position) async {
+    await _audioPlayer.seek(position + const Duration(seconds: 10));
+  }
+
+  void rewindSeek(Duration position) async {
+    await _audioPlayer.seek(position - const Duration(seconds: 10));
+  }
+
+  void playerDispose() async {
+    await _audioPlayer.stop();
+    await _audioPlayer.dispose();
+    _isPlaying = false;
+    notifyListeners();
+  }
+
   void filterPlayerByTitle(String title) {
     _listDatas = datas
         .where((element) =>
