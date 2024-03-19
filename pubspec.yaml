@@ -41,6 +41,9 @@ dependencies:
   url_launcher: ^6.2.5
   audioplayers: ^1.1.1
   provider: ^6.1.2
+  just_audio: ^0.9.36
+  just_audio_background: ^0.0.1-beta.11
+  audio_service: ^0.18.12
 
 flutter_native_splash:
   color: "#31363F"

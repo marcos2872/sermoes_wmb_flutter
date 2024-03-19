@@ -1,12 +1,14 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:sermoes_wmb_flutter/app/player/playerType.dart';
 import 'package:sermoes_wmb_flutter/sermoes.dart';
 
 class PlayerProvider extends ChangeNotifier {
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  final AudioPlayer player = AudioPlayer();
+
   late List<PlayerType> _listDatas = datas;
-  late PlayerType _currentData = new PlayerType(
+  late PlayerType _currentData = PlayerType(
       audio: '', audio_en: '', details: '', id: '', pdf: '', title: '');
   late Duration _totalDuration = Duration.zero;
   late Duration _currentDuration = Duration.zero;
@@ -21,38 +23,47 @@ class PlayerProvider extends ChangeNotifier {
   }
 
   void playPt() async {
-    // if (_selectedPlayer != 1) {
+    AudioSource audioSource = AudioSource.uri(Uri.parse(_currentData.audio),
+        tag: MediaItem(
+            id: _currentData.id,
+            title: _currentData.title,
+            artUri: Uri.file('/assets/images/wmb.png', windows: true)));
+
     _loading = true;
-    await _audioPlayer.stop();
-    await _audioPlayer.setSourceUrl(_currentData.audio);
+    await player.stop();
+    await player.setAudioSource(audioSource);
     _selectedPlayer = 1;
     _isPlaying = false;
+    _currentDuration = Duration.zero;
     _loading = false;
     notifyListeners();
-    // }
   }
 
   void playEn() async {
-    // if (selectedPlayer != 2) {
+    AudioSource audioSource = AudioSource.uri(Uri.parse(_currentData.audio_en),
+        tag: MediaItem(
+            id: _currentData.id,
+            title: _currentData.title,
+            artUri: Uri.file('/assets/images/wbranham.png')));
     _loading = true;
-    await _audioPlayer.stop();
-    await _audioPlayer.setSourceUrl(_currentData.audio_en);
+    await player.stop();
+    await player.setAudioSource(audioSource);
     _selectedPlayer = 2;
     _isPlaying = false;
+    _currentDuration = Duration.zero;
     _loading = false;
     notifyListeners();
-    // }
   }
 
   void pause() async {
-    await _audioPlayer.pause();
     _isPlaying = false;
+    await player.pause();
     notifyListeners();
   }
 
-  void resume() async {
-    await _audioPlayer.resume();
+  void play() async {
     _isPlaying = true;
+    await player.play();
     notifyListeners();
   }
 
@@ -60,46 +71,46 @@ class PlayerProvider extends ChangeNotifier {
     if (_isPlaying) {
       pause();
     } else {
-      resume();
+      play();
     }
     notifyListeners();
   }
 
   void seek(Duration position) async {
-    await _audioPlayer.seek(position);
+    await player.seek(position);
   }
 
   void forwardSeek(Duration position) async {
-    await _audioPlayer.seek(position + const Duration(seconds: 10));
+    await player.seek(position + const Duration(seconds: 10));
   }
 
   void rewindSeek(Duration position) async {
-    await _audioPlayer.seek(position - const Duration(seconds: 10));
+    await player.seek(position - const Duration(seconds: 10));
   }
 
   void rate() async {
     if (_rate == 1.0) {
-      await _audioPlayer.setPlaybackRate(1.5);
+      await player.setSpeed(1.5);
       _rate = 1.5;
     } else if (_rate == 1.5) {
-      await _audioPlayer.setPlaybackRate(2.0);
+      await player.setSpeed(2.0);
       _rate = 2.0;
     } else if (_rate == 2.0) {
-      await _audioPlayer.setPlaybackRate(0.5);
+      await player.setSpeed(0.5);
       _rate = 0.5;
     } else if (_rate == 0.5) {
-      await _audioPlayer.setPlaybackRate(1.0);
+      await player.setSpeed(1.0);
       _rate = 1.0;
     }
     if (!_isPlaying) {
-      await _audioPlayer.pause();
+      await player.pause();
     }
     notifyListeners();
   }
 
   void playerDispose() async {
-    await _audioPlayer.stop();
-    await _audioPlayer.dispose();
+    // await player.stop();
+    await player.dispose();
     _isPlaying = false;
     notifyListeners();
   }
@@ -113,20 +124,20 @@ class PlayerProvider extends ChangeNotifier {
   }
 
   void listenToDuration() {
-    _audioPlayer.onDurationChanged.listen((event) {
-      _totalDuration = event;
+    player.durationStream.listen((event) {
+      _totalDuration = event!;
       notifyListeners();
     });
 
-    _audioPlayer.onPositionChanged.listen((event) {
+    player.positionStream.listen((event) {
       _currentDuration = event;
       notifyListeners();
     });
 
-    _audioPlayer.onPlayerComplete.listen((event) {
-      _isPlaying = false;
-      notifyListeners();
-    });
+    // player.p.listen((event) {
+    //   _isPlaying = false;
+    //   notifyListeners();
+    // });
   }
 
   void toggleFavorite() {
@@ -139,10 +150,12 @@ class PlayerProvider extends ChangeNotifier {
   }
 
   void togglePlayer(int int) {
-    if (int == 1 && _currentData.audio.isNotEmpty) {
+    if (int == 1 && _selectedPlayer != 1 && _currentData.audio.isNotEmpty) {
       playPt();
       _selectedPlayer = 1;
-    } else if (_currentData.audio_en.isNotEmpty) {
+    } else if (_currentData.audio_en.isNotEmpty &&
+        _selectedPlayer != 2 &&
+        int == 2) {
       playEn();
       _selectedPlayer = 2;
     }

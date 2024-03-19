@@ -32,8 +32,6 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return SafeArea(child: Consumer<PlayerProvider>(
       builder: (context, value, child) {
-        final List<PlayerType> allDatas = value.allDatas;
-
         return Column(
           children: [
             const SizedBox(
@@ -58,18 +56,18 @@ class _SearchPageState extends State<SearchPage> {
             )),
             const SizedBox(height: 20.0),
             Expanded(
-              child: allDatas.isNotEmpty
+              child: value.allDatas.isNotEmpty
                   ? ListView.builder(
-                      itemCount: allDatas.length,
+                      itemCount: value.allDatas.length,
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                         return CardView(
-                          title: allDatas[index].title,
-                          audio: allDatas[index].audio.isNotEmpty,
-                          audio2: allDatas[index].audio_en.isNotEmpty,
-                          pdf: allDatas[index].pdf,
-                          id: allDatas[index].id,
+                          title: value.allDatas[index].title,
+                          audio: value.allDatas[index].audio.isNotEmpty,
+                          audio2: value.allDatas[index].audio_en.isNotEmpty,
+                          pdf: value.allDatas[index].pdf,
+                          id: value.allDatas[index].id,
                         );
                       },
                     )

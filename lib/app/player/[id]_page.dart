@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:routefly/routefly.dart';
 import 'package:sermoes_wmb_flutter/app/player/player_provider.dart';
@@ -184,7 +182,6 @@ class _PlayerPageState extends State<PlayerPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // const SizedBox(width: 10),
                                 SizedBox(
                                   width: 50.0,
                                   child: ElevatedButton(
@@ -195,14 +192,10 @@ class _PlayerPageState extends State<PlayerPage> {
                                                 (states) => Theme.of(context)
                                                     .colorScheme
                                                     .secondary),
-                                        // minimumSize: MaterialStateProperty.all(
-                                        //     const Size(40, 40)),
                                         fixedSize: MaterialStateProperty.all(
                                             const Size(50, 50)),
                                         padding: MaterialStateProperty.all(
-                                            EdgeInsets.zero)
-                                        // alignment: Alignment.center,
-                                        ),
+                                            EdgeInsets.zero)),
                                     child: Text(
                                       '${value.currentRate}x',
                                       style: TextStyle(
@@ -214,7 +207,6 @@ class _PlayerPageState extends State<PlayerPage> {
                                     ),
                                   ),
                                 ),
-                                // const SizedBox(width: 10),
                                 TextButton(
                                   onPressed: () =>
                                       value.rewindSeek(value.currentDuration),
@@ -225,7 +217,6 @@ class _PlayerPageState extends State<PlayerPage> {
                                     size: 50.0,
                                   ),
                                 ),
-                                // const SizedBox(width: 5),
                                 TextButton(
                                   onPressed: value.pauseOrResume,
                                   child: Icon(
@@ -237,7 +228,6 @@ class _PlayerPageState extends State<PlayerPage> {
                                     size: 50.0,
                                   ),
                                 ),
-                                // const SizedBox(width: 5),
                                 TextButton(
                                   onPressed: () =>
                                       value.forwardSeek(value.currentDuration),
@@ -248,7 +238,6 @@ class _PlayerPageState extends State<PlayerPage> {
                                     size: 50.0,
                                   ),
                                 ),
-                                // const SizedBox(width: 10),
                                 SizedBox(
                                   width: 50.0,
                                   child: ElevatedButton(
