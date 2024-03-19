@@ -5,7 +5,7 @@ import 'package:sermoes_wmb_flutter/app/player/playerType.dart';
 import 'package:sermoes_wmb_flutter/sermoes.dart';
 
 class PlayerProvider extends ChangeNotifier {
-  final AudioPlayer player = AudioPlayer();
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   late List<PlayerType> _listDatas = datas;
   late PlayerType _currentData = PlayerType(
@@ -24,14 +24,14 @@ class PlayerProvider extends ChangeNotifier {
 
   void playPt() async {
     AudioSource audioSource = AudioSource.uri(Uri.parse(_currentData.audio),
-        tag: MediaItem(
-            id: _currentData.id,
-            title: _currentData.title,
-            artUri: Uri.file('/assets/images/wmb.png', windows: true)));
+        tag: MediaItem(id: _currentData.id,
+        title: _currentData.title,
+        artUri: Uri.file('/assets/images/wbranham.png')
+        ));
 
     _loading = true;
-    await player.stop();
-    await player.setAudioSource(audioSource);
+    await _audioPlayer.stop();
+    await _audioPlayer.setAudioSource(audioSource);
     _selectedPlayer = 1;
     _isPlaying = false;
     _currentDuration = Duration.zero;
@@ -40,14 +40,14 @@ class PlayerProvider extends ChangeNotifier {
   }
 
   void playEn() async {
-    AudioSource audioSource = AudioSource.uri(Uri.parse(_currentData.audio_en),
-        tag: MediaItem(
-            id: _currentData.id,
-            title: _currentData.title,
-            artUri: Uri.file('/assets/images/wbranham.png')));
+     AudioSource audioSource = AudioSource.uri(Uri.parse(_currentData.audio_en),
+        tag: MediaItem(id: _currentData.id,
+        title: _currentData.title,
+        artUri: Uri.file('/assets/images/wbranham.png')
+        ));
     _loading = true;
-    await player.stop();
-    await player.setAudioSource(audioSource);
+    await _audioPlayer.stop();
+    await _audioPlayer.setAudioSource(audioSource);
     _selectedPlayer = 2;
     _isPlaying = false;
     _currentDuration = Duration.zero;
@@ -57,13 +57,13 @@ class PlayerProvider extends ChangeNotifier {
 
   void pause() async {
     _isPlaying = false;
-    await player.pause();
+    await _audioPlayer.pause();
     notifyListeners();
   }
 
   void play() async {
     _isPlaying = true;
-    await player.play();
+    await _audioPlayer.play();
     notifyListeners();
   }
 
@@ -77,40 +77,40 @@ class PlayerProvider extends ChangeNotifier {
   }
 
   void seek(Duration position) async {
-    await player.seek(position);
+    await _audioPlayer.seek(position);
   }
 
   void forwardSeek(Duration position) async {
-    await player.seek(position + const Duration(seconds: 10));
+    await _audioPlayer.seek(position + const Duration(seconds: 10));
   }
 
   void rewindSeek(Duration position) async {
-    await player.seek(position - const Duration(seconds: 10));
+    await _audioPlayer.seek(position - const Duration(seconds: 10));
   }
 
   void rate() async {
     if (_rate == 1.0) {
-      await player.setSpeed(1.5);
+      await _audioPlayer.setSpeed(1.5);
       _rate = 1.5;
     } else if (_rate == 1.5) {
-      await player.setSpeed(2.0);
+      await _audioPlayer.setSpeed(2.0);
       _rate = 2.0;
     } else if (_rate == 2.0) {
-      await player.setSpeed(0.5);
+      await _audioPlayer.setSpeed(0.5);
       _rate = 0.5;
     } else if (_rate == 0.5) {
-      await player.setSpeed(1.0);
+      await _audioPlayer.setSpeed(1.0);
       _rate = 1.0;
     }
     if (!_isPlaying) {
-      await player.pause();
+      await _audioPlayer.pause();
     }
     notifyListeners();
   }
 
   void playerDispose() async {
-    // await player.stop();
-    await player.dispose();
+    await _audioPlayer.stop();
+    // await _audioPlayer.dispose();
     _isPlaying = false;
     notifyListeners();
   }
@@ -124,17 +124,17 @@ class PlayerProvider extends ChangeNotifier {
   }
 
   void listenToDuration() {
-    player.durationStream.listen((event) {
+    _audioPlayer.durationStream.listen((event) {
       _totalDuration = event!;
       notifyListeners();
     });
 
-    player.positionStream.listen((event) {
+    _audioPlayer.positionStream.listen((event) {
       _currentDuration = event;
       notifyListeners();
     });
 
-    // player.p.listen((event) {
+    // _audioPlayer.p.listen((event) {
     //   _isPlaying = false;
     //   notifyListeners();
     // });
@@ -171,6 +171,7 @@ class PlayerProvider extends ChangeNotifier {
   double get currentRate => _rate;
   bool get isFavorite => _isFavorite;
   int get selectedPlayer => _selectedPlayer;
+  AudioPlayer get player => _audioPlayer;
 
   set setCurrentId(String id) {
     PlayerType data = _listDatas.firstWhere((element) => element.id == id);

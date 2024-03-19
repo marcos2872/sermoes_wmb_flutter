@@ -207,19 +207,19 @@ class _PlayerPageState extends State<PlayerPage> {
                                     ),
                                   ),
                                 ),
-                                TextButton(
+                                IconButton(
                                   onPressed: () =>
                                       value.rewindSeek(value.currentDuration),
-                                  child: Icon(
+                                  icon: Icon(
                                     Icons.fast_rewind_rounded,
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
                                     size: 50.0,
                                   ),
                                 ),
-                                TextButton(
+                                IconButton(
                                   onPressed: value.pauseOrResume,
-                                  child: Icon(
+                                  icon: Icon(
                                     value.isPlaying
                                         ? Icons.pause_circle_rounded
                                         : Icons.play_circle_rounded,
@@ -228,10 +228,10 @@ class _PlayerPageState extends State<PlayerPage> {
                                     size: 50.0,
                                   ),
                                 ),
-                                TextButton(
+                                IconButton(
                                   onPressed: () =>
                                       value.forwardSeek(value.currentDuration),
-                                  child: Icon(
+                                  icon: Icon(
                                     Icons.fast_forward_rounded,
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
