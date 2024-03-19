@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:routefly/routefly.dart';
+import 'package:sermoes_wmb_flutter/app/pdf/pdf_provider.dart';
 import 'package:sermoes_wmb_flutter/app/player/player_provider.dart';
 import 'package:sermoes_wmb_flutter/routes.dart';
 
@@ -25,11 +26,13 @@ class CardView extends StatefulWidget {
 
 class _CardViewState extends State<CardView> {
   late final dynamic playListProvider;
+  late final dynamic pdfProvider;
 
   @override
   void initState() {
     super.initState();
     playListProvider = Provider.of<PlayerProvider>(context, listen: false);
+    pdfProvider = Provider.of<PdfProvider>(context, listen: false);
   }
 
   void goPlay() {
@@ -41,6 +44,8 @@ class _CardViewState extends State<CardView> {
   }
 
   void goPdf() {
+    pdfProvider.setCurrentId = widget.id;
+
     Routefly.push(routePaths.pdf.$id.changes({'id': widget.id}));
   }
 
